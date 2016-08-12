@@ -1,0 +1,6 @@
+{
+    "require": {
+        "monolog/monolog": "1.0.*"
+        "alorel/dropbox-v2-php": ">=0.1 <1.0"
+    }
+}
