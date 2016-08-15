@@ -1,0 +1,79 @@
+<!-- Root element of PhotoSwipe. Must have class pswp.
+Do not change this unless you know what you are doing.
+PhotoSwip reuses these div's to reduce memory usage. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="pswp__bg"></div>
+    <div class="pswp__scroll-wrap">
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Sluiten (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Delen"></button>
+                <button class="pswp__button pswp__button--fs" title="Volledig scherm"></button>
+                <button class="pswp__button pswp__button--zoom" title="In/uit-zoomen"></button>
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Vorige (linker pijltje)"></button>
+            <button class="pswp__button pswp__button--arrow--right" title="Volgende (rechter pijltje)"></button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var pswpElement = document.querySelectorAll('.pswp')[0];
+
+    var items = [];
+
+    $('#thumbnails').children('div').each(function () 
+    {
+        var thumbnail = $(this).find('a.thumbnail');
+        var sizes = thumbnail.data('size').split('x');
+        var fullresUri = thumbnail.data('fullres-uri');
+        var caption = thumbnail.find('.caption > p').html();
+        var thumbUri = thumbnail.find('img').attr('src');
+
+        if (sizes == undefined || sizes.size < 2 || fullresUri == undefined || thumbUri == undefined) {
+            alert('Something is wrong with this album, data is missing');
+            return;
+        }
+
+        if (caption == undefined)
+            caption = '';
+
+        items.push({
+            src: fullresUri,
+            w: sizes[0],
+            h: sizes[1],
+            msrc: thumbUri,
+            title: caption
+        });
+    });
+
+    jQuery('a.thumbnail').click(function()
+    {
+        event.preventDefault();
+        
+        var options = { index: $(this).parent().index() };
+        var gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
+        gallery.init();
+
+    });
+</script>

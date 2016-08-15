@@ -1,0 +1,59 @@
+body {
+	background-color: #0d0d0d;
+	padding-right: 8px;
+}
+h1 {
+	color: rgba(74, 74, 74, 1);
+	font-weight: bold;
+	margin: 15px 30px 20px 30px;
+}
+.panel {
+	background-color: transparent;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+.frontpage_square img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: 100%;
+  width: auto;
+  max-width: none;
+  -webkit-transform: translate(-50%,-50%);
+      -ms-transform: translate(-50%,-50%);
+          transform: translate(-50%,-50%);
+}
+
+.frontpage_square{
+	position:relative;
+	overflow:hidden;
+	padding-bottom:100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.frontpage_square img {
+	position:absolute;
+}
+.thumbnail {
+	border: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	padding: 0;
+	border-radius: 0;
+	background-color: transparent;
+}
+.thumbnail .caption {
+	text-align: center;
+	color: #e0e0e0;
+}
+a.thumbnail:focus, a.thumbnail:hover {
+	text-decoration: none;
+}
+
+/* Custom PhotoSwipe styling */
+.pswp__bg {
+	background-color: #0d0d0d;
+}
+.pswp__caption__center {
+  text-align: center;
+}
