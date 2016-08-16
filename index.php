@@ -1,6 +1,7 @@
 <?php
 require 'dataprovider.php';
 /* @var $album Album */
+$album = getAlbumTree();
 
 if (isset($_GET['path']))
 {

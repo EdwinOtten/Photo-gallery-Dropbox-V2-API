@@ -7,6 +7,7 @@ error_reporting(E_ALL);
 require 'config.php';
 require 'vendor/autoload.php';
 
+use phpFastCache\CacheManager;
 
 use Alorel\Dropbox\Operation\AbstractOperation;
 use Alorel\Dropbox\Operation\Files\GetThumbnail;
@@ -19,43 +20,56 @@ AbstractOperation::setDefaultAsync(false);
 AbstractOperation::setDefaultToken(DROPBOX_V2_API_TOKEN);
 
 
-
-
 if (!isset($_GET['path']))
 	die('no path!');
 
 $imagePath = urldecode($_GET['path']);
 
-if (isset($_GET['thumbnail'])) 
+$cacheKey;
+$is_thumb = FALSE;
+if (isset($_GET['thumbnail']) && $_GET['thumbnail'] != '0' && $_GET['thumbnail'] != 'false') {
+	$cacheKey = "gallery_thumb_".hash('sha256', $imagePath);
+	$is_thumb = TRUE;
+}
+else
+	$cacheKey = "gallery_image_".hash('sha256', $imagePath);
+
+// Setup CacheManager
+$cacheManager = CacheManager::Files(array(
+  "path" => './cache',
+));
+
+// Try to get image from cache
+$cachedImage = $cacheManager->getItem($cacheKey);
+
+// If not in cache, fetch image and cache it.
+if (is_null($cachedImage->get())) 
 {
-	if ($_GET['thumbnail'] != '0' && $_GET['thumbnail'] != 'false') 
-	{
-		if (!file_exists(__DIR__.'/cache')) {
-		    mkdir(__DIR__.'/cache', 0777, true);
-		}
-		$hash = hash('sha256', $imagePath);
-		$cachedImagePath = __DIR__.'/cache/'.$hash.'.jpg';
+	$fetchedImage;
+	if ($is_thumb)
+		$fetchedImage = fetchThumbnail($imagePath);
+	else
+		$fetchedImage = fetchImage($imagePath);
 
-		if (!file_exists($cachedImagePath)) 
-		{
-		    $op = new GetThumbnail();
-		    $options = new GetThumbnailOptions();
-		    $options->setThumbnailSize(ThumbnailSize::w640h480())
-		        ->setThumbnailFormat(ThumbnailFormat::jpeg());
+	$cachedImage->set($fetchedImage)->expiresAfter($is_thumb?7776000:604800); // cache expires in 90 days for thumbs, 7 days for full res
+	$cacheManager->save($cachedImage);
+} 
 
-		    $fetchedThumb = $op->raw($imagePath, $options)->getBody()->getContents();
-		    file_put_contents($cachedImagePath, $fetchedThumb);
-		}
+header('Content-type: image/jpeg');
+echo $cachedImage->get();
 
-		$imginfo = getimagesize($cachedImagePath);
-		header("Content-type: ".$imginfo['mime']);
-		readfile($cachedImagePath);
-		die;
-	}
+
+function fetchImage($imagePath) 
+{
+  	$op = new Download();
+	return $op->raw($imagePath)->getBody()->getContents();
 }
 
-
-$op = new Download();
-$response = $op->raw($imagePath)->getBody()->getContents();
-header('Content-type: image/jpeg');
-echo $response;
+function fetchThumbnail($imagePath) 
+{
+	$op = new GetThumbnail();
+	$options = new GetThumbnailOptions();
+	$options->setThumbnailSize(ThumbnailSize::w640h480())
+	    ->setThumbnailFormat(ThumbnailFormat::jpeg());
+	return $op->raw($imagePath, $options)->getBody()->getContents();
+}
