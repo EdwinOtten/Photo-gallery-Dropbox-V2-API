@@ -99,6 +99,22 @@ class Album extends AlbumItem implements ParsableFromAssocArrayInterface
 		return NULL;
 	}
 
+	function getAlbumForPath($path)
+	{
+		if ($this->path === $path) {
+			return $this;
+		}
+		foreach ($this->items as $item) 
+		{
+			if ($item instanceof Album) {
+				$result = $item->getAlbumForPath($path);
+				if ($result instanceof Album)
+					return $result;
+			}
+		}
+		return NULL;
+	}
+
 	function addItem(AlbumItem $newItem)
 	{
 		if (!is_subclass_of($newItem, 'AlbumItem'))

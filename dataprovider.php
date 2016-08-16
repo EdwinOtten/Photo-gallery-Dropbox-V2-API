@@ -35,16 +35,16 @@ while ($hasMore)
     $cursor = $folderList['cursor'];
 }
 
-$gallery = new Album('My photo gallery', '');
+$album = new Album('My photo gallery', '');
 foreach ($entries as $entry)
 {
     if ($entry['.tag'] === 'folder')
-    	$gallery->addItem(new Album($entry['name'], $entry['path_lower']));
+    	$album->addItem(new Album($entry['name'], $entry['path_lower']));
 }
 foreach ($entries as $entry)
 {
     if ($entry['.tag'] !== 'folder')
-    	$gallery->addItem( parseDropboxImage($entry) );
+    	$album->addItem( parseDropboxImage($entry) );
 }
 
 function parseDropboxImage($entry)

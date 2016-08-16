@@ -1,11 +1,16 @@
 <?php
 require 'dataprovider.php';
-/* @var $gallery Album */
-// var_dump($gallery);die;
+/* @var $album Album */
+
+if (isset($_GET['path']))
+{
+    $subAlbum = $album->getAlbumForPath(urldecode($_GET['path']));
+    if ($subAlbum instanceof Album)
+        $album = $subAlbum;
+}
+
+
 ?>
-
-
-
 <html>
 <head>
     <?php echo file_get_contents('templates/scripts.html'); ?>
@@ -15,20 +20,20 @@ require 'dataprovider.php';
 
 <body>
 
-<h1><?php echo $gallery->name; ?></h1>
+<h1><a href="?path=<?php echo urlencode(getParentPath($album->path)); ?>">&#8679;</a> <?php echo $album->name; ?></h1>
 
 <!-- Root element of thumbnail grid -->
 <div class="col-sm-12 panel" id="thumbnails">
 
 <?php
-foreach ($gallery->items as $item)
+foreach ($album->items as $item)
 {
     if ($item->type == 'album') 
     {
         /* @var $item Album */
         echo '
     <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 col-xl-1">
-        <a href="#" class="thumbnail">
+        <a href="?path='.urlencode($item->path).'" class="thumbnail">
             <div class="frontpage_square">
                 <img src="images.php?path='.urlencode($item->getImageForThumbnail()->path).'&thumbnail=1" class="img img-responsive full-width" />
             </div>
