@@ -38,13 +38,17 @@ PhotoSwip reuses these div's to reduce memory usage. -->
 
 
 <script>
-    var pswpElement = document.querySelectorAll('.pswp')[0];
+$( document ).ready(function() {
 
+    var pswpElement = document.querySelectorAll('.pswp')[0];
     var items = [];
 
     $('#thumbnails').children('div').each(function () 
     {
-        var thumbnail = $(this).find('a.thumbnail');
+        var thumbnail = $(this).find('a.clickable');
+        if (thumbnail == undefined || thumbnail.html() == undefined)
+            return;
+
         var sizes = thumbnail.data('size').split('x');
         var fullresUri = thumbnail.data('fullres-uri');
         var caption = thumbnail.find('.caption > p').html();
@@ -67,13 +71,16 @@ PhotoSwip reuses these div's to reduce memory usage. -->
         });
     });
 
-    jQuery('a.thumbnail').click(function()
+    jQuery('a.clickable').click(function()
     {
         event.preventDefault();
-        
-        var options = { index: $(this).parent().index() };
+        var sameClassObjects = $('#thumbnails').find('a.clickable');
+        var thumbnailIndex = sameClassObjects.index($(this));
+        var options = { index: thumbnailIndex };
         var gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
         gallery.init();
 
     });
+
+});
 </script>
