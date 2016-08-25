@@ -53,8 +53,9 @@ if (is_null($cachedImage->get()))
 
 	$cachedImage->set($fetchedImage)->expiresAfter($is_thumb?7776000:604800); // cache expires in 90 days for thumbs, 7 days for full res
 	$cacheManager->save($cachedImage);
-} 
+}
 
+header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + (60 * 60 * 24))); // 1 day
 header('Content-type: image/jpeg');
 echo $cachedImage->get();
 

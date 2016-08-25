@@ -1,11 +1,19 @@
 body {
 	background-color: #0d0d0d;
+    background-image: -webkit-radial-gradient(80% 10%, circle, #00272b, transparent), -webkit-radial-gradient(80% 50%, circle, #67cfda, transparent), -webkit-radial-gradient(20% 80%, 20em 40em, #175816, transparent), -webkit-radial-gradient(110% 70%, 20em 40em, #f008ff, transparent), -webkit-radial-gradient(10% 10%, circle, #b7aca4, transparent);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: center;
 	padding-right: 8px;
 }
 h1 {
-	color: rgba(74, 74, 74, 1);
+	color: rgba(255,255,255,0.3);
 	font-weight: bold;
 	margin: 15px 30px 20px 30px;
+}
+h1 a {
+	color: rgba(255,255,255,0.3);
+	text-decoration: none;
 }
 .panel {
 	background-color: transparent;
@@ -13,23 +21,24 @@ h1 {
 	box-shadow: none;
 }
 .frontpage_square img {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  height: 100%;
-  width: auto;
-  max-width: none;
-  -webkit-transform: translate(-50%,-50%);
-      -ms-transform: translate(-50%,-50%);
-          transform: translate(-50%,-50%);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    max-width: 178%;
+    max-height: 178%;
+    -webkit-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
 }
 
-.frontpage_square{
+.frontpage_square {
 	position:relative;
 	overflow:hidden;
 	padding-bottom:100%;
-    background-repeat: no-repeat;
-    background-size: cover;
+	background-color: rgba(0,0,0,0.3);
+    box-shadow: 0 0 13px -3px black;
 }
 .frontpage_square img {
 	position:absolute;

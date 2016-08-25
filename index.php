@@ -12,7 +12,8 @@ if (isset($_GET['path']))
 
 
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="nl">
 <head>
     <?php echo file_get_contents('templates/scripts.html'); ?>
     <?php echo file_get_contents('templates/photoswipe-scripts.html'); ?>
@@ -33,7 +34,7 @@ foreach ($album->items as $item)
     {
         /* @var $item Album */
         echo '
-    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 col-xl-1">
+    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-2 col-xl-1">
         <a href="?path='.urlencode($item->path).'" class="thumbnail">
             <div class="frontpage_square">
                 <img src="images.php?path='.urlencode($item->getImageForThumbnail()->path).'&thumbnail=1" class="img img-responsive full-width" />

@@ -30,22 +30,19 @@ class AlbumImage extends AlbumItem implements ParsableFromAssocArrayInterface
 	public $width;
 	public $date_taken;
 
-	function __construct($name, $path, $width, $height, $date_taken) 
+	function __construct($name, $path, $width, $height, $date_taken = NULL) 
 	{
 		if (!is_string($path))
 			throw new Exception('class AlbumImage: $path should be a string!');
 
-		if (preg_match("/\\.(jpeg|jpg|png|gif)$/i", $path) === FALSE)
-			throw new Exception('class AlbumImage: $path should be a JPEG/JPG, PNG or GIF!');
+		if (preg_match("/\\.(jpeg|jpg)$/i", $path) === FALSE)
+			throw new Exception('class AlbumImage: $path should be a JPEG/JPG!');
 
 		if (!is_integer($width))
 			throw new Exception('class AlbumImage: $width should be an integer!');
 
 		if (!is_integer($height))
 			throw new Exception('class AlbumImage: $height should be an integer!');
-
-		if (!is_string($date_taken))
-			throw new Exception('class AlbumImage: $date_taken should be a string!');
 			
 		parent::__construct($name, $path);
 		$this->width = $width;

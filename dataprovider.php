@@ -2,7 +2,7 @@
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+error_reporting(E_ALL & ~E_NOTICE);
 
 require 'config.php';
 require 'models.php';
@@ -71,7 +71,7 @@ function fetchAlbumTree()
   }
   foreach ($entries as $entry)
   {
-      if ($entry['.tag'] !== 'folder')
+      if ( $entry['.tag'] === 'file' && (preg_match("/\\.(jpeg|jpg)$/i", $entry['path_lower']) === 1) )
         $album->addItem( parseDropboxImage($entry) );
   }
 
@@ -80,6 +80,12 @@ function fetchAlbumTree()
 
 function parseDropboxImage($entry)
 {
+	if (!isset($entry['media_info'])) {
+		echo 'oops';
+    var_dump($entry);
+    die('//');
+  }
+
  	$name = $entry['name'];
  	$path = $entry['path_lower'];
  	$width = $entry['media_info']['metadata']['dimensions']['width'];
