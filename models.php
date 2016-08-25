@@ -5,6 +5,24 @@ interface ParsableFromAssocArrayInterface
 	public static function assocArrayToObject(array $assocArray);
 }
 
+function compareAlbumItem($a, $b)
+{
+	if ( $a->type !== 'image' || $b->type !== 'image' )
+	{
+		if ( $a->type === 'album' && $b->type === 'image' )
+			return -1;
+		else if ( $a->type === 'image' && $b->type === 'album' )
+			return 1;
+		else if ( 
+			$a->type === 'album' && 
+			$b->type === 'album' && 
+			preg_match("/^20[0-9]{2}/", $a->name) === 1 && 
+			preg_match("/^20[0-9]{2}/", $b->name) === 1 )
+		    return strcmp($b->name, $a->name); // sort reverse if both are albums and both names appears to be year-numbers
+	}
+	return strcmp($a->name, $b->name);
+}
+
 class AlbumItem
 {
 	public $type;
@@ -119,6 +137,7 @@ class Album extends AlbumItem implements ParsableFromAssocArrayInterface
 	
 		if ($this->path === getParentPath($newItem->path)) {
 			$this->items[] = $newItem;
+			usort($this->items, 'compareAlbumItem');
 			return TRUE;
 		}
 		foreach ($this->items as $item) 
