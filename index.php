@@ -1,4 +1,7 @@
 <?php
+
+header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', date() + 3600));
+
 require 'dataprovider.php';
 /* @var $album Album */
 $album = getAlbumTree();

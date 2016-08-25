@@ -42,8 +42,10 @@ $cacheManager = CacheManager::Files(array(
 // Try to get image from cache
 $cachedImage = $cacheManager->getItem($cacheKey);
 
+$image = $cachedImage->get();
+
 // If not in cache, fetch image and cache it.
-if (is_null($cachedImage->get())) 
+if (is_null($image)) 
 {
 	$fetchedImage;
 	if ($is_thumb)
@@ -53,9 +55,10 @@ if (is_null($cachedImage->get()))
 
 	$cachedImage->set($fetchedImage)->expiresAfter($is_thumb?7776000:604800); // cache expires in 90 days for thumbs, 7 days for full res
 	$cacheManager->save($cachedImage);
+	$image = $cachedImage->get();
 }
 
-header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + (60 * 60 * 24))); // 1 day
+header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', $cachedImage->getExpirationDate()->getTimestamp()));
 header('Content-type: image/jpeg');
 echo $cachedImage->get();
 
