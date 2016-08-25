@@ -36,7 +36,7 @@ else
 
 // Setup CacheManager
 $cacheManager = CacheManager::Files(array(
-  "path" => './cache',
+      "path" => CACHE_DIR,
 ));
 
 // Try to get image from cache

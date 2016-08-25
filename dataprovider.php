@@ -25,7 +25,7 @@ function getAlbumTree()
 {
   // Setup CacheManager
   $cacheManager = CacheManager::Files(array(
-      "path" => './cache',
+      "path" => CACHE_DIR,
   ));
 
   // Try to get album tree from cache
@@ -63,10 +63,10 @@ function fetchAlbumTree()
 
   // Parse folder contents to an album tree
   /* @var $album Album */
-  $album = new Album('My photo gallery', '');
+  $album = new Album(GALLERY_NAME, '');
   foreach ($entries as $entry)
   {
-      if ($entry['.tag'] === 'folder')
+      if ($entry['.tag'] === 'folder' && substr($entry['name'],0,1)!=='.' )
         $album->addItem(new Album($entry['name'], $entry['path_lower']));
   }
   foreach ($entries as $entry)
